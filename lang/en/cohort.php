@@ -19,6 +19,8 @@
  *
  * @package    core_cohort
  * @subpackage cohort
+ * @copyright  2024 Marco Cassisa
+ * @copyright  2017 Yusuf Yilmaz
  * @copyright  2010 Petr Skoda (info@skodak.org)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,6 +32,7 @@ $string['assign'] = 'Assign';
 $string['assignto'] = 'Cohort \'{$a}\' members';
 $string['backtocohorts'] = 'Back to cohorts';
 $string['bulkadd'] = 'Add to cohort';
+$string['bulkremove'] = 'Remove from cohort';
 $string['bulknocohort'] = 'No available cohorts found';
 $string['categorynotfound'] = 'Category <b>{$a}</b> not found or you don\'t have permission to create a cohort there. The default context will be used.';
 $string['cohort'] = 'Cohort';
@@ -88,6 +91,7 @@ $string['unknowncohort'] = 'Unknown cohort ({$a})!';
 $string['uploadcohorts'] = 'Upload cohorts';
 $string['uploadedcohorts'] = 'Uploaded {$a} cohorts';
 $string['useradded'] = 'User added to cohort "{$a}"';
+$string['userremovedfromcohort'] = 'User removed from cohort "{$a}"';
 $string['search'] = 'Search';
 $string['searchcohort'] = 'Search cohort';
 $string['uploadcohorts_help'] = 'Cohorts may be uploaded via text file. The format of the file should be as follows:

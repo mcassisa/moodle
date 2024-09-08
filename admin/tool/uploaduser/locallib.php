@@ -206,6 +206,7 @@ function uu_validate_user_upload_columns(csv_import_reader $cir, $stdfields, $pr
         'category',
         'categoryrole',
         'cohort',
+	'removefrom_cohort',
         'course',
         'enrolperiod',
         'enrolstatus',

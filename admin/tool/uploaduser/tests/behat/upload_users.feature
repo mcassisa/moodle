@@ -318,3 +318,49 @@ Feature: Upload users
     And I navigate to "Users > Accounts > Browse list of users" in site administration
     And I should see "Samwise Gamgee"
     And I should see "Frodo Baggins"
+
+
+@javascript
+Feature: Upload users with cohort removal functionality
+  As an administrator with the capability 'moodle/cohort:assign'
+  I want to be able to remove users from specific cohorts during the CSV upload process
+  So that I can manage cohort memberships efficiently
+
+  Background:
+    Given I am logged in as an admin with the capability 'moodle/cohort:assign'
+    And the users have been created using "lib/tests/fixtures/upload_users.csv"
+    And I navigate to "Site administration > Users > Upload users"
+
+  Scenario: Upload CSV to remove users from cohorts
+    When I upload "lib/tests/fixtures/upload_users_removecohorts.csv" file to "File" filemanager
+    And I press "Upload users"
+    Then I should see "Upload users preview"
+    And I should see "tomjones" "tomjones@example.com" "ASD"
+    And I should see "marysmith" "marysmith@example.com" "DSA"
+    And I should see "marysmith" "marysmith@example.com" "ASD"
+    And I should see "alicesmith" "alicesmith@example.com" "DSA"
+    And I should see "marysmith" "marysmith@example.com" "NONEXISTING"
+    And I should see "nonexisting" "idonotexist@example.com" "ASD"
+    And I should see "nonexisting" "idonotexist@example.com" "NONEXISTING"
+    
+    And I choose Upload type "Update existing users only"
+    And I press "Update users"
+    Then I should see "Upload users results"
+    And I should see "User up-to-date 2 5 tomjones tomjones@example.com manual User removed from cohort 'ASD' No"
+    And I should see "User up-to-date 3 6 marysmith marysmith@example.com manual User removed from cohort 'DSA' No"
+    And I should see "User up-to-date 4 6 marysmith marysmith@example.com manual No"
+    And I should see "User up-to-date 5 8 alicesmith alicesmith@example.com manual User removed from cohort 'DSA' No"
+    And I should see "User up-to-date 6 6 marysmith marysmith@example.com manual Unknown cohort (NONEXISTING)! No"
+    And I should see "User not updated - does not exist 7 nonexisting idonotexist@example.com manual"
+    And I should see "User not updated - does not exist 8 nonexisting idonotexist@example.com manual"
+
+  Scenario: Verify users removed from cohorts
+    Given I navigate to "Site administration > Users > Accounts > Cohorts"
+    And I choose "Assign" on the line "ASD"
+    Then the Selected users box should not contain "Tom Jones"
+    And the Potential users box should contain "Tom Jones"
+    And I choose "Assign" on the line "DSA"
+    Then the Selected users box should not contain "Mary Smith"
+    And the Potential users box should contain "Mary Smith"
+    And the Selected users box should not contain "Alice Smith"
+    And the Potential users box should contain "Alice Smith"

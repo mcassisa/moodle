@@ -1119,6 +1119,47 @@ class process {
             }
         }
 
+        // Remove from cohort
+        foreach ($this->get_file_columns() as $column) {
+            if (!preg_match('/^removefrom_cohort\d+$/', $column)) {
+                continue;
+            }
+            if (!empty($user->$column && has_capability('moodle/cohort:assign', \context_system::instance()))) {
+                $removefromcohort = $user->$column;
+		//Let's check if such a cohort exists
+                if (!isset($this->cohorts[$removefromcohort])) {
+		    //Identified either by string id or idnumber
+                    if (is_number($user->$column)) {
+                        // Only non-numeric idnumbers!
+                        $cohort = $DB->get_record('cohort', ['id' => $user->$column]);
+                    } else {
+                        $cohort = $DB->get_record('cohort', ['idnumber' => $user->$column]);
+                    }
+
+                    if (empty($cohort)) {
+                        $this->cohorts[$removefromcohort] = get_string('unknowncohort', 'cohort', s($removefromcohort));
+                    } else if (!empty($cohort->component)) {
+                        // Cohorts synchronised with external sources must not be modified!
+                        $this->cohorts[$removefromcohort] = get_string('external', 'core_cohort');
+                    } else {
+                        $this->cohorts[$removefromcohort] = $cohort;
+                    }
+                }
+                if (is_object($this->cohorts[$removefromcohort])) {
+                    $cohort = $this->cohorts[$removefromcohort];
+                    if ($DB->record_exists('cohort_members', ['cohortid' => $cohort->id, 'userid' => $user->id])) {
+                        cohort_remove_member($cohort->id, $user->id);
+                        // We might add special column later, for now let's abuse enrolments.
+                        $this->upt->track('enrolments', get_string('userremovedfromcohort', 'core_cohort', s($cohort->name)), 'info');
+                    }
+                } 
+		else {
+                    // Error message.
+                    $this->upt->track('enrolments', $this->cohorts[$removefromcohort], 'error');
+                }
+            }
+        }
+
         // Find course enrolments, groups, roles/types and enrol periods
         // this is again a special case, we always do this for any updated or created users.
         foreach ($this->get_file_columns() as $column) {

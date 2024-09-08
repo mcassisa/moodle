@@ -1,0 +1,8 @@
+username,email,removefrom_cohort1
+tomjones,tomjones@example.com,ASD
+marysmith,marysmith@example.com,DSA
+marysmith,marysmith@example.com,ASD
+alicesmith,alicesmith@example.com,DSA
+marysmith,marysmith@example.com,NONEXISTING
+nonexisting,idonotexist@example.com,ASD
+nonexisting,idonotexist@example.com,NONEXISTING

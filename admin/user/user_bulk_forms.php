@@ -109,6 +109,11 @@ class user_bulk_action_form extends moodleform {
                 new moodle_url('/admin/user/user_bulk_cohortadd.php'),
                 get_string('bulkadd', 'core_cohort'));
         }
+        if ($canaccessbulkactions && has_capability('moodle/cohort:assign', $syscontext)) {
+            $actions['removefromcohort'] = new action_link(
+                new moodle_url('/admin/user/user_bulk_cohortremove.php'),
+                get_string('bulkremove', 'core_cohort'));
+        }
 
         // Collect all bulk user actions.
         $hook = new \core_user\hook\extend_bulk_user_actions();

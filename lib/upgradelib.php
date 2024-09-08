@@ -2521,6 +2521,7 @@ function check_db_prefix_length(environment_results $result) {
 
     require_once($CFG->libdir.'/ddllib.php');
     $prefixlen = strlen($CFG->prefix) ?? 0;
+print_r($CFG->prefix);
     if ($prefixlen > xmldb_table::PREFIX_MAX_LENGTH) {
         $parameters = (object)['current' => $prefixlen, 'maximum' => xmldb_table::PREFIX_MAX_LENGTH];
         $result->setFeedbackStr(['dbprefixtoolong', 'admin', $parameters]);
